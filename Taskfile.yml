@@ -1,0 +1,55 @@
+version: '3'
+tasks:
+  clone-edk2:
+    cmds:
+      - git clone --depth=1 --single-branch -b master https://github.com/tianocore/edk2.git
+      - cd edk2 && git submodule update --init --recursive --recommend-shallow --depth=1
+  build-ovmf:
+    cmds:
+      - >
+        docker run
+        --platform linux/amd64
+        --rm
+        -it
+        -v {{ .USER_WORKING_DIR }}:{{ .EDK2_DOCKER_USER_HOME }}
+        -e EDK2_DOCKER_USER_HOME={{ .EDK2_DOCKER_USER_HOME }}
+        -w {{ .EDK2_DOCKER_USER_HOME }}
+        ghcr.io/tianocore/containers/ubuntu-22-build:latest
+        /bin/bash -c "{{ .BUILD_SCRIPT }}"
+      - cp edk2/Build/OvmfX64/RELEASE_GCC5/FV/OVMF.fd .
+      - cp edk2/Build/OvmfX64/RELEASE_GCC5/FV/OVMF_CODE.fd .
+    vars:
+      EDK2_DOCKER_USER_HOME: /home/edk2
+      BUILD_SCRIPT: |
+        cd {{ .EDK2_DOCKER_USER_HOME }}/edk2
+        source edksetup.sh
+        make -C BaseTools
+        build -p OvmfPkg/OvmfPkgX64.dsc -t GCC5 -a X64 -b RELEASE
+  build-main:
+    cmd: >
+      clang
+      --target=x86_64-unknown-windows
+      -nostdlib
+      -fshort-wchar
+      -ffreestanding
+      -fno-exceptions
+      -fno-rtti
+      -mno-red-zone
+      -fuse-ld=lld
+      -Wl,/subsystem:efi_application
+      -Wl,/entry:efi_main
+      -o main.efi main.c
+  create-fs:
+    deps:
+      - build-main
+    cmds:
+      - mkdir -p fs/EFI/BOOT
+      - cp main.efi fs/EFI/BOOT/BOOTX64.EFI
+  run:
+    deps:
+      - create-fs
+    cmd: >
+      qemu-system-x86_64
+      -bios OVMF.fd
+      -hda fat:rw:fs
+    interactive: true
