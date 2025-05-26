@@ -1,3 +1,6 @@
 {
-  "git.autoRepositoryDetection": "openEditors"
+  "git.autoRepositoryDetection": "openEditors",
+  "files.associations": {
+    ".clangd": "yaml"
+  }
 }

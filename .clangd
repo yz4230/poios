@@ -1,0 +1,15 @@
+If:
+  PathMatch: .*
+CompileFlags:
+  Add:
+    - --target=x86_64-unknown-windows
+    - -nostdlib
+    - -fshort-wchar
+    - -ffreestanding
+    - -fno-exceptions
+    - -fno-rtti
+    - -mno-red-zone
+    - -fuse-ld=lld
+    - '-Wl,/subsystem:efi_application'
+    - '-Wl,/entry:efi_main'
+  Compiler: clang
