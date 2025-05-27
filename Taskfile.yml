@@ -1,4 +1,4 @@
-version: '3'
+version: "3"
 tasks:
   clone-edk2:
     cmds:
@@ -38,6 +38,8 @@ tasks:
       -fuse-ld=lld
       -Wl,/subsystem:efi_application
       -Wl,/entry:efi_main
+      -Iedk2/MdePkg/Include/X64
+      -Iedk2/MdePkg/Include
       -o main.efi main.c
   create-fs:
     deps:

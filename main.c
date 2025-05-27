@@ -1,15 +1,9 @@
-struct EFI_SYSTEM_TABLE {
-    char _buf[60];
-    struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL {
-        unsigned long long _buf;
-        unsigned long long (*OutputString)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This, unsigned short *String);
-        unsigned long long _buf2[4];
-        unsigned long long (*ClearScreen)(struct EFI_SIMPLE_TEXT_OUTPUT_PROTOCOL *This);
-    } *ConOut;
-};
+#include <Uefi.h>
 
-void efi_main(void *ImageHandle __attribute__((unused)), struct EFI_SYSTEM_TABLE *SystemTable) {
-    SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
-    SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Hello, World!\n");
-    while (1);
+EFI_STATUS efi_main(EFI_HANDLE *ImageHandle, EFI_SYSTEM_TABLE *SystemTable) {
+  SystemTable->ConOut->ClearScreen(SystemTable->ConOut);
+  SystemTable->ConOut->OutputString(SystemTable->ConOut, L"Hello, World!\n");
+  while (1)
+    ;
+  return EFI_SUCCESS;
 }

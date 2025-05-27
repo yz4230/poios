@@ -10,6 +10,8 @@ CompileFlags:
     - -fno-rtti
     - -mno-red-zone
     - -fuse-ld=lld
-    - '-Wl,/subsystem:efi_application'
-    - '-Wl,/entry:efi_main'
+    - "-Wl,/subsystem:efi_application"
+    - "-Wl,/entry:efi_main"
+    - -Iedk2/MdePkg/Include/X64
+    - -Iedk2/MdePkg/Include
   Compiler: clang
