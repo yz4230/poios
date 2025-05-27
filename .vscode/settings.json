@@ -1,4 +1,5 @@
 {
+  "editor.formatOnSave": true,
   "git.autoRepositoryDetection": "openEditors",
   "files.associations": {
     ".clangd": "yaml"
