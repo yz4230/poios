@@ -1,5 +1,6 @@
 /.task
 /*.efi
+/*.EFI
 /*.fd
 /edk2
 /fs
