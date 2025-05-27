@@ -40,13 +40,13 @@ tasks:
       -Wl,/entry:efi_main
       -Iedk2/MdePkg/Include/X64
       -Iedk2/MdePkg/Include
-      -o main.efi main.c
+      -o BOOTX64.EFI main.c
   create-fs:
     deps:
       - build-main
     cmds:
       - mkdir -p fs/EFI/BOOT
-      - cp main.efi fs/EFI/BOOT/BOOTX64.EFI
+      - cp BOOTX64.EFI fs/EFI/BOOT/BOOTX64.EFI
   run:
     deps:
       - create-fs
